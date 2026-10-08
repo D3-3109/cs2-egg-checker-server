@@ -36,9 +36,14 @@ COPY --from=build /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 /app/lib/
 
 COPY --from=build /src/build/release/bin/cs2-egg-checker-server /app/
 COPY --from=build /src/build/release/bin/libsteam_api.so /app/
+# Full Steam client module required by SteamGameServer_Init(); steam_api looks
+# for it via dlopen ("steamclient.so" in LD_LIBRARY_PATH) and ~/.steam/sdk64/
+COPY --from=build /src/submodules/steamworks/redistributable_bin/linux64/steamclient.so /app/
 COPY docker-entrypoint.sh /app/
 
-RUN chmod +x /app/docker-entrypoint.sh && mkdir -p /data
+RUN chmod +x /app/docker-entrypoint.sh \
+    && mkdir -p /data /root/.steam/sdk64 \
+    && ln -s /app/steamclient.so /root/.steam/sdk64/steamclient.so
 
 ENV LD_LIBRARY_PATH=/app:/app/lib \
     DBPATH=/data/egg.db

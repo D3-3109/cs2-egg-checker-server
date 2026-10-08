@@ -7,6 +7,7 @@ on:
             - "Dockerfile"
             - "docker-entrypoint.sh"
             - ".dockerignore"
+            - "submodules/steamworks/redistributable_bin/**"
             - ".github/workflows/docker.yml"
     workflow_dispatch:
 
@@ -56,3 +57,14 @@ jobs:
                   labels: ${{ steps.meta.outputs.labels }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
+
+            # Boot the published image briefly: SteamGameServer_Init must
+            # succeed (steamclient.so loadable) so the binary reaches the
+            # "Listening on ..." line before the timeout kills it.
+            - name: Smoke test image
+              run: |
+                  IMAGE=$(echo '${{ steps.meta.outputs.json }}' | jq -r '.tags[0]')
+                  docker pull "$IMAGE"
+                  timeout 45 docker run --rm "$IMAGE" > smoke.log 2>&1 || true
+                  cat smoke.log
+                  grep -q "Listening on" smoke.log
