@@ -125,12 +125,12 @@ inline constexpr const char *GetOrdinalSuffix(int day)
 	}
 }
 
-inline std::string FormatTimestampToUTCString(std::int64_t timestamp_seconds)
+inline std::string FormatTimestampToString(std::int64_t timestamp_seconds)
 {
 	using namespace std::chrono;
 
-	// Convert seconds to a time_point with second precision
-	sys_seconds tp {seconds {timestamp_seconds}};
+	// Present timestamps in UTC+8 (mainland China) regardless of host timezone
+	sys_seconds tp {seconds {timestamp_seconds} + hours {8}};
 
 	// Split into calendar date and time-of-day
 	auto           days_since_epoch = floor<days>(tp);
@@ -145,7 +145,7 @@ inline std::string FormatTimestampToUTCString(std::int64_t timestamp_seconds)
 	int minutes     = tod.minutes().count();
 	int seconds_val = tod.seconds().count();
 
-	return std::format("{}年{}月{}日 {:02}:{:02}:{:02} (UTC)", year, month, day, hours_24, minutes, seconds_val);
+	return std::format("{}年{}月{}日 {:02}:{:02}:{:02} (UTC+8)", year, month, day, hours_24, minutes, seconds_val);
 }
 
 inline std::optional<std::string> FormatTimeLeftDuration(std::int64_t timestamp_seconds)

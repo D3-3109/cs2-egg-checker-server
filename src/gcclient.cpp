@@ -189,7 +189,7 @@ void CGCClient::OnPet(CClient *client, CSOEconItem &pet)
 		lines.push_back(std::format("[ {} ]", pet.id()));
 
 	if (auto deployDate = ItemAttribute<180, uint32_t>::Get(pet))
-		lines.push_back(std::format("- 孵化时间: {}", FormatTimestampToUTCString(deployDate.value())));
+		lines.push_back(std::format("- 孵化时间: {}", FormatTimestampToString(deployDate.value())));
 
 	if (auto upgradeLevel = ItemAttribute<268, uint32_t>::Get(pet))
 	{
@@ -226,13 +226,13 @@ void CGCClient::OnPet(CClient *client, CSOEconItem &pet)
 	if (auto foodExpiration = ItemAttribute<303, uint32_t>::Get(pet))
 	{
 		std::optional<std::string> duration = FormatTimeLeftDuration(foodExpiration.value());
-		lines.push_back(std::format("- 食物过期: {} ({})", FormatTimestampToUTCString(foodExpiration.value()), duration.value_or("已过期")));
+		lines.push_back(std::format("- 食物过期: {} ({})", FormatTimestampToString(foodExpiration.value()), duration.value_or("已过期")));
 	}
 
 	if (auto nextUpgrade = ItemAttribute<304, uint32_t>::Get(pet))
 	{
 		std::optional<std::string> duration = FormatTimeLeftDuration(nextUpgrade.value());
-		lines.push_back(std::format("- 下次升级: {} ({})", FormatTimestampToUTCString(nextUpgrade.value()), duration.value_or("已升级")));
+		lines.push_back(std::format("- 下次升级: {} ({})", FormatTimestampToString(nextUpgrade.value()), duration.value_or("已升级")));
 	}
 
 	if (auto seed = ItemAttribute<313, uint32_t>::Get(pet))
