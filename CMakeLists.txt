@@ -14,6 +14,13 @@ add_compile_definitions(
 	_GLIBCXX_USE_CXX11_ABI=0
 )
 
+# Sources contain UTF-8 string literals (localized console output)
+if(MSVC)
+	add_compile_options(/utf-8)
+else()
+	add_compile_options(-finput-charset=UTF-8 -fexecution-charset=UTF-8)
+endif()
+
 # sqlite3
 add_library(sqlite3 STATIC
 	submodules/sqlite/sqlite3.c

@@ -86,7 +86,7 @@ void CClient::RunFrame()
 	else if (!m_closed && GetConnectTime().count() >= 60)
 	{
 		// If we take more than 60 seconds just kick the client
-		PrintToConsole("\n\n\n\n\n\n\n\n\n\nFailed to receive inventory data from GameCoordinator\n\n\n\n\n\n\n\n\n\n");
+		PrintToConsole("\n\n\n\n\n\n\n\n\n\n未能从 GameCoordinator 获取物品数据\n\n\n\n\n\n\n\n\n\n");
 		Track(CDB::EUserResult::Timeout, "GC inventory timeout");
 		Close(NETWORK_DISCONNECT_TIMEDOUT, true);
 	}

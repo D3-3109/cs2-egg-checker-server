@@ -189,54 +189,54 @@ void CGCClient::OnPet(CClient *client, CSOEconItem &pet)
 		lines.push_back(std::format("[ {} ]", pet.id()));
 
 	if (auto deployDate = ItemAttribute<180, uint32_t>::Get(pet))
-		lines.push_back(std::format("- Hatched: {}", FormatTimestampToUTCString(deployDate.value())));
+		lines.push_back(std::format("- 孵化时间: {}", FormatTimestampToUTCString(deployDate.value())));
 
 	if (auto upgradeLevel = ItemAttribute<268, uint32_t>::Get(pet))
 	{
 		static constexpr const char *levels[] = {
-		    "Egg",
-		    "Chick",
-		    "Pullet",
-		    "Hen",
+		    "蛋",
+		    "雏鸡",
+		    "半大鸡",
+		    "母鸡",
 		};
-		static constexpr const int levelsSize = sizeof(levels) / sizeof(*levels);
+		static constexpr int levelsSize = sizeof(levels) / sizeof(*levels);
 		if (upgradeLevel.value() < 0 || upgradeLevel.value() >= levelsSize)
-			lines.push_back(std::format("- Upgrade Level: {}", upgradeLevel.value()));
+			lines.push_back(std::format("- 成长阶段: {}", upgradeLevel.value()));
 		else
-			lines.push_back(std::format("- Upgrade Level: {}", levels[upgradeLevel.value()]));
+			lines.push_back(std::format("- 成长阶段: {}", levels[upgradeLevel.value()]));
 	}
 
 	if (auto petId = ItemAttribute<296, uint32_t>::Get(pet))
 	{
 		static constexpr const char *petTypes[] = {
 		    nullptr,
-		    "Egg",
-		    "Chick",
-		    "Catalana",
-		    "Silkie",
-		    "Polish",
+		    "蛋",
+		    "雏鸡",
+		    "加泰罗尼亚鸡",
+		    "丝毛鸡",
+		    "波兰鸡",
 		};
-		static constexpr const int petTypesSize = sizeof(petTypes) / sizeof(*petTypes);
+		static constexpr int petTypesSize = sizeof(petTypes) / sizeof(*petTypes);
 		if (petId.value() < 0 || petId.value() >= petTypesSize || petTypes[petId.value()] == nullptr)
-			lines.push_back(std::format("- Pet ID: {}", petId.value()));
+			lines.push_back(std::format("- 品种: {}", petId.value()));
 		else
-			lines.push_back(std::format("- Pet ID: {}", petTypes[petId.value()]));
+			lines.push_back(std::format("- 品种: {}", petTypes[petId.value()]));
 	}
 
 	if (auto foodExpiration = ItemAttribute<303, uint32_t>::Get(pet))
 	{
 		std::optional<std::string> duration = FormatTimeLeftDuration(foodExpiration.value());
-		lines.push_back(std::format("- Food Expiration: {} ({})", FormatTimestampToUTCString(foodExpiration.value()), duration.value_or("Expired!")));
+		lines.push_back(std::format("- 食物过期: {} ({})", FormatTimestampToUTCString(foodExpiration.value()), duration.value_or("已过期")));
 	}
 
 	if (auto nextUpgrade = ItemAttribute<304, uint32_t>::Get(pet))
 	{
 		std::optional<std::string> duration = FormatTimeLeftDuration(nextUpgrade.value());
-		lines.push_back(std::format("- Next Upgrade: {} ({})", FormatTimestampToUTCString(nextUpgrade.value()), duration.value_or("Upgraded!")));
+		lines.push_back(std::format("- 下次升级: {} ({})", FormatTimestampToUTCString(nextUpgrade.value()), duration.value_or("已升级")));
 	}
 
 	if (auto seed = ItemAttribute<313, uint32_t>::Get(pet))
-		lines.push_back(std::format("- Pet Seed: {}", seed.value()));
+		lines.push_back(std::format("- 宠物种子: {}", seed.value()));
 
 	// TODO: Figure out which bit means what
 #if 0
@@ -328,10 +328,10 @@ void CGCClient::OnSOCache(const CMsgSOCacheSubscribed &cache)
 	}
 
 	if (!foundAnyEgg)
-		client->PrintToConsole("Failed to find pet");
+		client->PrintToConsole("未找到宠物");
 
 	auto delta = std::chrono::duration_cast<std::chrono::seconds>(memoryCache->m_timecacheexpiresat - clock::now());
-	client->PrintToConsole(std::format("Note: This data is cached for 30 minutes ({} seconds left)", delta.count()));
+	client->PrintToConsole(std::format("注: 此数据缓存 30 分钟 (剩余 {} 秒)", delta.count()));
 
 	client->PrintToConsole("\n\n\n\n\n\n\n\n\n\n");
 	client->Track(foundAnyEgg ? CDB::EUserResult::Success : CDB::EUserResult::NoEgg, nullptr, &cache);

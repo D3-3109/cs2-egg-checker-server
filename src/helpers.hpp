@@ -139,19 +139,13 @@ inline std::string FormatTimestampToUTCString(std::int64_t timestamp_seconds)
 
 	int         day   = static_cast<unsigned>(ymd.day());
 	int         year  = static_cast<int>(ymd.year());
-	std::string month = std::format("{:%B}", ymd.month()); // "October"
+	unsigned    month = static_cast<unsigned>(ymd.month());
 
 	int hours_24    = tod.hours().count();
 	int minutes     = tod.minutes().count();
 	int seconds_val = tod.seconds().count();
 
-	// 12-hour clock and am/pm conversion
-	bool is_pm    = hours_24 >= 12;
-	int  hours_12 = hours_24 % 12;
-	if (hours_12 == 0)
-		hours_12 = 12;
-
-	return std::format("{}{} {} {} at {:02}:{:02}:{:02}{} UTC", day, GetOrdinalSuffix(day), month, year, hours_12, minutes, seconds_val, is_pm ? "pm" : "am");
+	return std::format("{}年{}月{}日 {:02}:{:02}:{:02} (UTC)", year, month, day, hours_24, minutes, seconds_val);
 }
 
 inline std::optional<std::string> FormatTimeLeftDuration(std::int64_t timestamp_seconds)
@@ -175,12 +169,12 @@ inline std::optional<std::string> FormatTimeLeftDuration(std::int64_t timestamp_
 	std::string result;
 
 	if (d > 0)
-		result += std::format("{}d ", d);
+		result += std::format("{}天", d);
 	if (h > 0)
-		result += std::format("{}h ", h);
+		result += std::format("{}小时", h);
 	if (m > 0)
-		result += std::format("{}m ", m);
-	result += std::format("{}s", s);
+		result += std::format("{}分", m);
+	result += std::format("{}秒", s);
 
 	return result;
 }
