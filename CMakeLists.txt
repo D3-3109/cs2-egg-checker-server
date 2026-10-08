@@ -14,11 +14,10 @@ add_compile_definitions(
 	_GLIBCXX_USE_CXX11_ABI=0
 )
 
-# Sources contain UTF-8 string literals (localized console output)
+# Sources contain UTF-8 string literals (localized console output);
+# GCC and Clang already default to UTF-8 for both input and execution charset
 if(MSVC)
 	add_compile_options(/utf-8)
-else()
-	add_compile_options(-finput-charset=UTF-8 -fexecution-charset=UTF-8)
 endif()
 
 # sqlite3
