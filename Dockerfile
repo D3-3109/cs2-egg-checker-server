@@ -29,6 +29,10 @@ RUN cmake --preset release \
 # ---- Runtime stage ----
 FROM ubuntu:24.04
 
+# steamclient needs system CA certificates for its TLS connections to Steam
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the exact C++ runtime the binary was linked against: the base image's
 # libstdc++ is older than the GCC 14 one the build uses.
 COPY --from=build /usr/lib/x86_64-linux-gnu/libstdc++.so.6* /app/lib/

@@ -7,6 +7,8 @@ on:
             - "Dockerfile"
             - "docker-entrypoint.sh"
             - ".dockerignore"
+            - "src/**"
+            - "CMakeLists.txt"
             - "submodules/steamworks/redistributable_bin/**"
             - ".github/workflows/docker.yml"
     workflow_dispatch:

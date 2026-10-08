@@ -6,6 +6,7 @@
 #include <atomic>
 #include <base_gcmessages.pb.h>
 #include <connectionless_netmessages.pb.h>
+#include <cstdio>
 #include <csignal>
 #include <cstrike15_gcmessages.pb.h>
 #include <gcsdk_gcmessages.pb.h>
@@ -28,6 +29,9 @@ void SignalHandler(int signal)
 
 int main(int argc, char **argv)
 {
+	// Line-buffer stdout so logs show up live under docker logs -f
+	std::setvbuf(stdout, nullptr, _IOLBF, 0);
+
 	struct Options
 	{
 		// "-dbpath"
