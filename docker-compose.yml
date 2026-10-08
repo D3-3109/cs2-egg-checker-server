@@ -1,0 +1,16 @@
+services:
+  cs2-egg-checker:
+    image: ghcr.io/d3-3109/cs2-egg-checker-server:latest
+    build: .
+    container_name: cs2-egg-checker
+    restart: unless-stopped
+    environment:
+      # SQLite analytics database inside the /data volume
+      DBPATH: /data/egg.db
+      # Uncomment to accept direct IP connections instead of Steam P2P,
+      # and publish the UDP port below accordingly
+      # LISTEN: "0.0.0.0:27015"
+    volumes:
+      - ./data:/data
+    # ports:
+    #   - "27015:27015/udp"

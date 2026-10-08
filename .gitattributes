@@ -1,2 +1,5 @@
 submodules/** linguist-vendored
 src/protobufs/** linguist-vendored
+
+# Shell scripts must keep LF line endings, they run inside the Linux container
+*.sh text eol=lf

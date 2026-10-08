@@ -8,3 +8,6 @@ submodules/steamworks/public/**/*.lib
 submodules/steamworks/public/**/*.dll
 submodules/steamworks/public/**/*.so
 submodules/steamworks/public/**/*.dylib
+
+# Local docker-compose data directory
+/data
